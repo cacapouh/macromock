@@ -38,33 +38,3 @@ trait HogeRepository {
   println(scala.util.Try(mocked.findX(1))) // Failure(scala.NotImplementedError: Not mocked)
 }
 ```
-
-
-### メモ
-
-```
-// ↓こんな感じで書きたい
-val mocked = mock[A] (
-  _.add(1, 2) -> 3, // IDEのコード補完が効くように...
-  _.add(3, 4) -> 7,
-)
-```
-
-```
-// ↓モックされた値を上書きするメソッドが欲しい
-
-val mocked = mock[MockedHogeRepository] // ここで未実装のメソッドが全てNotImplementedErrorで実装される
-
-update(mocked)(_.findX(1) -> new Hoge)
-// ↓マクロ展開結果
-{
-  class MockTargetImpl extends java.lang.Object with MockedHogeRepository {
-    def find(id: scala.Int): Hoge = id match {
-      case 1 => new Hoge
-      case _ => mocked.find(id) // オリジナルのmockの方に処理を委譲
-    }
-  }
-  
-  new MockTargetImpl
-}
-```
