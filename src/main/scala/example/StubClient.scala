@@ -1,12 +1,9 @@
-トレイトで定義されている未実装のメソッドを全てNotImplementedErrorで実装するマクロ
+package example
 
-### 使い方
 
-スタブ対象のトレイトの型`T`を使って`StubFactory.stub[T]`とするだけ。
+import macromock.StubFactory
+import annotation.experimental
 
-例:
-
-```
 case class Hoge(id: Int)
 
 trait HogeRepository {
@@ -37,4 +34,3 @@ trait HogeRepository {
   println(stubed.defaultImpl(111)) // 1
   println(scala.util.Try(stubed.findX(1))) // Failure(scala.NotImplementedError: Not stubed)
 }
-```
